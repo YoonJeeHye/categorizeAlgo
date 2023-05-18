@@ -1,0 +1,45 @@
+import java.util.*;
+
+class Solution {
+    static int answer;
+    static int[] nums;
+    static boolean[] visited;
+    static int dSize;
+    public int solution(int k, int[][] dungeons) {
+        answer = Integer.MIN_VALUE;
+        
+        dSize = dungeons.length;
+        nums = new int[dSize];
+        visited = new boolean[dSize];
+        Perm(0, k, dungeons);
+        
+        return answer;
+    }
+    
+    public void Perm(int idx, int k, int[][] dungeons){
+        if(idx == dSize){
+            // 피로도 계산
+            int pirodo = k;
+            int sum = 0;
+            for(int i = 0; i < dSize; i++){
+                if(dungeons[nums[i]][0] <= pirodo){
+                    pirodo -= dungeons[nums[i]][1];
+                    sum++;
+                }else{
+                    break;
+                }
+            }
+            answer = Math.max(answer, sum);
+            return;
+        }
+        
+        for(int i = 0; i < dSize; i++){
+            if(!visited[i]){
+                nums[idx] = i;
+                visited[i] = true;
+                Perm(idx+1, k, dungeons);
+                visited[i] = false;
+            }
+        }
+    }
+}
